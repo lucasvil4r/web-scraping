@@ -1,6 +1,5 @@
 import urllib.request
 from bs4 import BeautifulSoup
-import pandas as pd
 
 url = 'https://www.efurukawa.com/br/c?Nrpp=437&ajaxPage=false'
 page = urllib.request.urlopen(url)
@@ -14,4 +13,3 @@ for prod in list_prod:
 for code in list_code:
     codeText = code.get_text()
     print(codeText)
-
