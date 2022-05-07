@@ -20,7 +20,7 @@ from selenium import webdriver
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--headless')
-driver = webdriver.Chrome(executable_path=r'C:\Users\DEPOSITO\Clone repositorio\Web Scraping\chromedriver_win32\chromedriver.exe', chrome_options=chrome_options)
+driver = webdriver.Chrome(executable_path=r'C:\caminho do chromeDriver...', chrome_options=chrome_options)
 driver.get
 url = 'https://www.furukawalatam.com/pt-br/catalogo-de-produtos-categoria/FCS/'
 page = urllib.request.urlopen(url)
