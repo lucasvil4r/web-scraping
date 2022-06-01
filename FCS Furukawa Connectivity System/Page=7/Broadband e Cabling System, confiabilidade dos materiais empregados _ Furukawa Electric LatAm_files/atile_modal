@@ -1,0 +1,133 @@
+/*
+
+    Atile modal
+    Autor: Sergio Migueis
+    Versão 0.1
+    Classe Jquery que com base em um objeto com nome $("#baseModalAtile") cria uma modal e mostra ela na tela
+    Recebe uma lista de opções que tem padrão
+    Pode receber e mostrar os callbacks de acordo.
+
+
+    Alterações e releases
+    04/05/2021 
+    - Correção no código quanto ao fechamento do aviso
+    - Três Linhas comentadas para retirar botões que não funcionavam e reposicionado o "x" para baixo da mensagem de aviso e transformado em "OK"
+==============================================================================================================
+    
+*/
+
+(function ($) {
+
+    $.fn.atileModal = function (options) {
+
+        //temos um parametro padrão
+        var settings = $.extend({
+            // These are the defaults.
+            buttons: {
+                positive: "Yes",
+                negative: "No",
+                cancel: "Cancel"
+            },
+            callbacks: {
+                positive: null,
+                negative: null,
+                cancel: null,
+            },
+            show: {
+                positive: true,
+                negative: false,
+                cancel: true
+
+            },
+            titleCssClass: "atile-modal-title",
+            messageCssClass: "atile-modal-message",
+            cancelButtonCssClass: "atile-modal-cancel-button", //anterior "atile-modal-close-button", 
+            closeButtonCssClass: "atile-modal-close-button", // anterior "atile-modal-cancel-button",
+            positiveButtonCssClass: "atile-modal-positive-button",
+            negativeButtonCssClass: "atile-modal-negative-button",
+            modalCssClass: "",
+            title: "Mensagem",
+            message: "Mensagem"
+        }, options);
+
+        var htmlbase = '<div id="closeModalAtile" class="modal-container"><div id="atile-modal-content" class="site-modal-alert-content atile-modal-content ' + settings.modalCssClass + '">'
+            + '<div class="content">'
+            + '<div class="col-xs-12 padding-pattern text-content site-form">'
+            + '<h2 id="modal-title" class="' + settings.titleCssClass + '"></h2>'
+            + '<p id="modal-message" class="' + settings.messageCssClass + '"></p>'
+            //            + '<button id="cancel-button" class="btn-form-go ' + settings.cancelButtonCssClass + '">Cancelar</button>'  //linha comentada
+            //            + '<button id="positive-button" class="btn-form-go ' + settings.positiveButtonCssClass + '">Sim</button>'   // //linha comentada
+            //            + '<button id="negative-button" class="btn-form-go ' + settings.negativeButtonCssClass + '">Não</button>'  //linha comentada
+            + '</div>'
+            + '<div class="atile-close">'
+            + '<button id="close-button" class="btn-form-go ' + settings.closeButtonCssClass + '">OK</button>'
+            + '</div>'
+            + '</div>'
+            + '</div>';
+            + '</div>';
+
+        var cssbase = '<style>.modal-container{display:flex;align-items:center;position:fixed;width:100%;height:100%;top:0;left:0;z-index:9999}.atile-modal-content{display:block!important;z-index:9;-webkit-border-radius:10px;-moz-border-radius:10px;border-radius:10px;margin:0 auto;display:none;background-color:#fff;-webkit-box-shadow:10px10px16px1px#aaa;-moz-box-shadow:10px10px16px1px#aaa;box-shadow:10px10px16px1px#aaa}.atile-modal-contentform{width:600px;margin:0auto;margin-bottom:150px}.atile-modal-content.active{background:0 0}div.atile-modal-content{min-width:200px;max-width:600px!important;margin-left:auto!important}div.atile-modal-content.content{padding:0!important}.atile-modal-contenth2{font-size:21px;line-height:28px}.atile-modal-contentp{padding:15px0px;margin:0}.atile-modal-contentbutton{margin-top:10px;padding:5px5px;float:none;display:inline-block}.site-form{text-align:center}.atile-close{text-align:center;}</style>';
+
+
+
+
+        return this.each(function () {
+            // var $(this) = $(this);
+            $('#closeModalAtile').css('display', 'flex');
+            console.log($(this));
+            $(this).html("");
+            if (!$("#atile-modal-content").length) {
+                $('body').prepend(htmlbase);
+                $('body').prepend(cssbase);
+            }
+
+            if (!settings.show.positive) $('.' + settings.positiveButtonCssClass).hide();
+            else $('#positive-button').show();
+            if (!settings.show.negative) $('.' + settings.negativeButtonCssClass).hide();
+            else $('#negative-button').show();
+            if (!settings.show.cancel) $('.' + settings.cancelButtonCssClass).hide();
+            else $('#cancel-button').show();
+
+            $('.' + settings.closeButtonCssClass).show();
+
+            $('#cancel-button').html(settings.buttons.cancel);
+            $('#negative-button').html(settings.buttons.negative);
+            $('#positive-button').html(settings.buttons.positive);
+            $('#modal-title').html(settings.title);
+            $('#modal-message').html(settings.message);
+            $('#negative-button').on('click', function (e) {
+                if (settings.callbacks.negative == null) {
+                    $(this).children().fadeOut(400);
+                } else {
+                    settings.callbacks.negative(e);
+                }
+                $(this).children().remove();
+            });
+            $('#positive-button').on('click', function (e) {
+                if (settings.callbacks.positive == null) {
+                    $(this).children().fadeOut(400);
+                } else {
+                    settings.callbacks.positive(e);
+                }
+                $(this).children().remove();
+            });
+            $('#cancel-button').on('click', function (e) {
+                if (settings.callbacks.cancel == null) {
+                    $(this).children().fadeOut(400);
+                } else {
+                    settings.callbacks.cancel(e);
+                }
+                $(this).children().remove();
+            });
+            $('#close-button').on('click', function (e) {
+                console.log('fechando modal');
+                $('#closeModalAtile').hide();
+
+            });
+
+            $(this).children().fadeIn(400);
+        });
+
+    };
+
+}(jQuery));

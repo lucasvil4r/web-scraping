@@ -1,0 +1,48 @@
+$(document).ready(function() {
+
+    $(document).on('click',".site-modal-open",function() {
+
+        $("#site-modal").fadeIn(300);
+        $("#site-modal-content").fadeIn(300);
+        $("#site-modal-share").fadeIn(3000);
+
+
+        $("#site-modal").addClass("active");
+        $("#site-modal-content").addClass("active");
+
+        $("html, body").animate({
+            scrollTop: 0
+        }, 1500);
+
+    });
+
+    function modalClose() {
+        $("#site-modal-content").addClass("remove-act");
+        $("#site-modal-content").removeClass("active");
+        $("#site-modal").removeClass("active");
+
+
+        setTimeout(
+            function() {
+                $("#site-modal").fadeOut(300);
+                $("#site-modal-content").fadeOut(300);
+                $("#site-modal-content").removeClass("remove-act");
+                 $("html, body").animate({
+                    /*scrollTop: $('.modal-end').position().top*/
+                }, 500);
+            }, 500);
+    }
+    
+    $(document).on('click', "#site-modal-close", function() {
+        modalClose();
+    });
+    
+    $(document).on('click', "#site-modal", function() {
+        modalClose();
+    });
+
+    $(".box-print").click(function () {
+            window.print();
+    });
+
+});

@@ -1,0 +1,58 @@
+$(document).ready(function() {
+    
+    
+    var windowSize = $(window).width();
+    
+    /* Tablet Itens */
+    
+   function tabletItens(){
+       
+       var windowSize = $(window).width();
+       
+       if ( windowSize > 460 & windowSize < 1500) {
+
+           $("#header-menu-content").removeClass("col-xs-7");
+           $("#header-menu-content").addClass("col-xs-8")
+           
+           $("#header-language-content").removeClass("col-xs-2");
+           $("#header-language-content").addClass("col-xs-3");
+        }
+       else 
+       {
+           $("#header-menu-content").removeClass("col-xs-8");
+           $("#header-menu-content").addClass("col-xs-7")
+           
+           $("#header-language-content").removeClass("col-xs-3");
+           $("#header-language-content").addClass("col-xs-2");
+       }
+   };
+    
+    $(window).resize(function(){
+        tabletItens();
+    }); 
+    
+   tabletItens();
+    
+    
+    /* Moviment Itens */
+    
+ /*   var animateMe = function(targetElement, speed){
+
+    $(targetElement).css({left:'-200px'});
+    $(targetElement).animate(
+        {
+        'left': $(document).width() + 200
+        },
+        {
+        duration: speed,
+        complete: function(){
+            animateMe(this, speed);
+            }
+            }
+        );
+
+    };
+    animateMe($('#banner-dot'), 5000);
+    animateMe($('#object2'), 3000);
+*/
+});
