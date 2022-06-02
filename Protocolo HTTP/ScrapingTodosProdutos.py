@@ -12,3 +12,4 @@ for prod in list_prod:
 
 for code in list_code:
     print(code.get_text())
+    
