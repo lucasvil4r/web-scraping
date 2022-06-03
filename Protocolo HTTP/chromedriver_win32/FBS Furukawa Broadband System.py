@@ -48,14 +48,19 @@ while cont != 1:
     
 import pandas as pd
 
-data = {
-    1: listaProdutos,
-    2: listaObs
-}
+#lista = pd.DataFrame(data = {
+#    "Descrição": listaProdutos,
+#    "Especificação": listaObs
+#})
 
-lista = pd.DataFrame(data = {
-    "Descrição": listaProdutos,
-    "Especificação": listaObs
-})
+df = pd.read_excel('C:/xampp/htdocs/diretorio/Web-Scraping/Protocolo HTTP/chromedriver_win32/Web-Scraping-Furukawa.xlsx')
+df = pd.read_excel('Web-Scraping-Furukawa.xlsx', sheet_name = "FBS Furukawa Broadband System", nrows = 10)
 
-print(lista)
+listaColunas = [listaProdutos,
+                 listaObs
+                ]
+
+df = pd.read_excel("Web-Scraping-Furukawa.xlsx"
+                 , sheet_name = "FBS Furukawa Broadband System"
+                 , usecols = listaColunas
+                )
