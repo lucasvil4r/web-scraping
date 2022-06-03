@@ -9,10 +9,10 @@ import urllib.request
 
 cont = 0
 
-while cont != 292:
+while cont != 1:
     cont +=1
     
-    url = (f'https://www.furukawalatam.com/pt-br/catalogo-de-produtos-categoria/FCS/?page={cont}')
+    url = (f'https://www.furukawalatam.com/pt-br/catalogo-de-produtos-categoria/FIS?page={cont}')
 
 # Pegar conteudo HTML a partir da URL
 
@@ -32,6 +32,7 @@ while cont != 292:
 
     soup = BeautifulSoup(html_content, "html.parser")
     descricao = soup.find_all('p', attrs={'product-name title break-all'})
+    descricao = soup.find_all('p', attrs={'pb-3 fillterBy'}) 
 
     for prod in descricao:
         descricao = prod.get_text()
