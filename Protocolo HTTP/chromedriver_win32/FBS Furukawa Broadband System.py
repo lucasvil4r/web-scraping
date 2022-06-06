@@ -1,11 +1,8 @@
 import time
-import requests
-import pandas as pd
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.firefox.options import  Options
-import json
-import urllib.request
+
 
 listaProdutos = []
 listaObs = []
@@ -23,12 +20,10 @@ while cont != 1:
     driver = webdriver.Chrome(executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\Protocolo HTTP\chromedriver_win32\chromedriver.exe')
     driver.get(url)
 
-    time.sleep(10)
+    time.sleep(15)
 
     element = driver.find_element_by_xpath("//div[@class='container d-flex mt-2']")
-    #driver.find_element_by_xpath("//nav[@class='d-flex justify-content-center mt-5']//ul[@class='pagination']//li[@class='page-item']//a[class='page-link active']").click()
     html_content = element.get_attribute("outerHTML")
-
 
     #Parsear o conteudo HTML  - BeautifulSoup
 
@@ -44,23 +39,12 @@ while cont != 1:
         obs = obser.get_text()
         listaObs.append(obs)
         
-    driver.quit()
-    
-import pandas as pd
+driver.quit()
 
-#lista = pd.DataFrame(data = {
-#    "Descrição": listaProdutos,
-#    "Especificação": listaObs
-#})
+with open('C:/xampp/htdocs/diretorio/Web-Scraping/Relatorios.csv/Scraping-Furukawa-FBS_DESCRI.csv', 'a', encoding='utf=8') as file:
+    file.writelines('\n'.join(listaProdutos))
+    file.close()
 
-df = pd.read_excel('C:/xampp/htdocs/diretorio/Web-Scraping/Protocolo HTTP/chromedriver_win32/Web-Scraping-Furukawa.xlsx')
-df = pd.read_excel('Web-Scraping-Furukawa.xlsx', sheet_name = "FBS Furukawa Broadband System", nrows = 10)
-
-listaColunas = [listaProdutos,
-                 listaObs
-                ]
-
-df = pd.read_excel("Web-Scraping-Furukawa.xlsx"
-                 , sheet_name = "FBS Furukawa Broadband System"
-                 , usecols = listaColunas
-                )
+with open('C:/xampp/htdocs/diretorio/Web-Scraping/Relatorios.csv/Scraping-Furukawa-FBS_OBS.csv', 'a', encoding='utf=8') as file:
+    file.writelines('\n'.join(listaObs))
+    file.close()
