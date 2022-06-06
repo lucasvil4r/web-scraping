@@ -9,10 +9,10 @@ listaProdutos = []
 listaObs = []
 cont = 0
 
-while cont != 232:
+while cont != 53:
     cont +=1
     
-    url = (f'https://www.furukawalatam.com/pt-br/catalogo-de-produtos-categoria/FBS?page={cont}')
+    url = (f'https://www.furukawalatam.com/pt-br/catalogo-de-produtos-categoria/FIS?page={cont}')
 
 # Pegar conteudo HTML a partir da URL
 
@@ -42,7 +42,7 @@ while cont != 232:
         
 driver.quit()
 
-with open('C:/xampp/htdocs/diretorio/Web-Scraping/Relatorios.csv/Scraping-Furukawa-FBS.csv', 'a', encoding='utf=8') as file:
+with open('C:/xampp/htdocs/diretorio/Web-Scraping/Relatorios.csv/Scraping-Furukawa-FIS.csv', 'a', encoding='utf=8') as file:
     tamanhoLista = len(listaProdutos)
     tamanhoLista - 1
     indice = 0
