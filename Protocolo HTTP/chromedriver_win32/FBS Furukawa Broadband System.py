@@ -3,6 +3,12 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.firefox.options import  Options
 
+# Pegar conteudo HTML a partir da URL
+
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_argument('--headless')
+driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\Protocolo HTTP\chromedriver_win32\chromedriver.exe')
+#driver = webdriver.Chrome(executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\Protocolo HTTP\chromedriver_win32\chromedriver.exe')
 
 listaProdutos = []
 listaObs = []
@@ -12,12 +18,6 @@ while cont != 232:
     cont +=1
     
     url = (f'https://www.furukawalatam.com/pt-br/catalogo-de-produtos-categoria/FBS?page={cont}')
-
-# Pegar conteudo HTML a partir da URL
-
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument('--headless')
-    driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\Protocolo HTTP\chromedriver_win32\chromedriver.exe')
     driver.get(url)
 
     time.sleep(15)
@@ -38,8 +38,10 @@ while cont != 232:
     for obser in observacao:
         obs = obser.get_text()
         listaObs.append(obs)
-        
-    driver.quit()
+    
+driver.quit()
+
+#Gera arquivo e preenche os dados coletados.
 
 with open('C:/xampp/htdocs/diretorio/Web-Scraping/Relatorios.csv/Scraping-Furukawa-FBS.csv', 'a', encoding='utf=8') as file:
     tamanhoLista = len(listaProdutos)
@@ -59,4 +61,5 @@ with open('C:/xampp/htdocs/diretorio/Web-Scraping/Relatorios.csv/Scraping-Furuka
         file.write(f'{prod} § {obse}')
         file.write('\n')
         indice +=1
+
     file.close()

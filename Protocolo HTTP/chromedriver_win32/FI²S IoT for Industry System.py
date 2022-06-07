@@ -3,21 +3,21 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.firefox.options import  Options
 
+# Pegar conteudo HTML a partir da URL
+
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_argument('--headless')
+driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\Protocolo HTTP\chromedriver_win32\chromedriver.exe')
+#driver = webdriver.Chrome(executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\Protocolo HTTP\chromedriver_win32\chromedriver.exe')
 
 listaProdutos = []
 listaObs = []
 cont = 0
 
-while cont != 53:
+while cont != 232:
     cont +=1
     
     url = (f'https://www.furukawalatam.com/pt-br/catalogo-de-produtos-categoria/FIS?page={cont}')
-
-# Pegar conteudo HTML a partir da URL
-
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument('--headless')
-    driver = webdriver.Chrome(executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\Protocolo HTTP\chromedriver_win32\chromedriver.exe')
     driver.get(url)
 
     time.sleep(15)
@@ -25,7 +25,7 @@ while cont != 53:
     element = driver.find_element_by_xpath("//div[@class='container d-flex mt-2']")
     html_content = element.get_attribute("outerHTML")
 
-    #Parsear o conteudo HTML  - BeautifulSoup
+#Parsear o conteudo HTML  - BeautifulSoup
 
     soup = BeautifulSoup(html_content, "html.parser")
     descricao = soup.find_all('p', attrs={'product-name title break-all'})
@@ -38,8 +38,10 @@ while cont != 53:
     for obser in observacao:
         obs = obser.get_text()
         listaObs.append(obs)
-        
-    driver.quit()
+    
+driver.quit()
+
+#Gera arquivo e preenche os dados coletados.
 
 with open('C:/xampp/htdocs/diretorio/Web-Scraping/Relatorios.csv/Scraping-Furukawa-FIS.csv', 'a', encoding='utf=8') as file:
     tamanhoLista = len(listaProdutos)
@@ -59,4 +61,5 @@ with open('C:/xampp/htdocs/diretorio/Web-Scraping/Relatorios.csv/Scraping-Furuka
         file.write(f'{prod} § {obse}')
         file.write('\n')
         indice +=1
+
     file.close()
