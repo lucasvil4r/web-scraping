@@ -3,7 +3,6 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.firefox.options import  Options
 
-
 listaProdutos = []
 listaObs = []
 cont = 0
@@ -17,7 +16,7 @@ while cont != 292:
 
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument('--headless')
-    driver = webdriver.Chrome(executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\Protocolo HTTP\chromedriver_win32\chromedriver.exe')
+    driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\Protocolo HTTP\chromedriver_win32\chromedriver.exe')
     driver.get(url)
 
     time.sleep(15)
@@ -33,23 +32,29 @@ while cont != 292:
 
     for descri in descricao:
         descricao = descri.get_text()
-        descricao = descricao.strip()
         listaProdutos.append(descricao)
         
     for obser in observacao:
         obs = obser.get_text()
-        obs = obs.strip()
         listaObs.append(obs)
         
 driver.quit()
 
-with open('C:/xampp/htdocs/diretorio/Web-Scraping/Relatorios.csv/Scraping-Furukawa-FCSv2.csv', 'a', encoding='utf=8') as file:
+with open('C:/xampp/htdocs/diretorio/Web-Scraping/Relatorios.csv/Scraping-Furukawa-FCS.csv', 'a', encoding='utf=8') as file:
     tamanhoLista = len(listaProdutos)
     tamanhoLista - 1
     indice = 0
     while indice != tamanhoLista:
         prod = listaProdutos[indice]
+        prod = prod.strip()
+        prod = prod.replace("\r", "")
+        prod = prod.replace("\n", " ")
+
         obse = listaObs[indice]
+        obse = obse.strip()
+        obse = obse.replace("\r", "")
+        obse = obse.replace("\n", " ")
+
         file.write(f'{prod} § {obse}')
         file.write('\n')
         indice +=1

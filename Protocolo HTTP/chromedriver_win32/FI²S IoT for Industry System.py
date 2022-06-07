@@ -33,12 +33,10 @@ while cont != 53:
 
     for descri in descricao:
         descricao = descri.get_text()
-        descricao = descricao.strip()
         listaProdutos.append(descricao)
         
     for obser in observacao:
         obs = obser.get_text()
-        obs = obs.strip()
         listaObs.append(obs)
         
 driver.quit()
@@ -49,7 +47,15 @@ with open('C:/xampp/htdocs/diretorio/Web-Scraping/Relatorios.csv/Scraping-Furuka
     indice = 0
     while indice != tamanhoLista:
         prod = listaProdutos[indice]
+        prod = prod.strip()
+        prod = prod.replace("\r", "")
+        prod = prod.replace("\n", " ")
+
         obse = listaObs[indice]
+        obse = obse.strip()
+        obse = obse.replace("\r", "")
+        obse = obse.replace("\n", " ")
+
         file.write(f'{prod} § {obse}')
         file.write('\n')
         indice +=1
