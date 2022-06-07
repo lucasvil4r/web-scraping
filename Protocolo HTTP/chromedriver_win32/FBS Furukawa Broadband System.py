@@ -39,7 +39,7 @@ while cont != 232:
         obs = obser.get_text()
         listaObs.append(obs)
         
-driver.quit()
+    driver.quit()
 
 with open('C:/xampp/htdocs/diretorio/Web-Scraping/Relatorios.csv/Scraping-Furukawa-FBS.csv', 'a', encoding='utf=8') as file:
     tamanhoLista = len(listaProdutos)
