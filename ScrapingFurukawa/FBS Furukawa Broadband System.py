@@ -7,7 +7,7 @@ from selenium.webdriver.firefox.options import  Options
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--headless')
-driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\Protocolo HTTP\chromedriver_win32\chromedriver.exe')
+driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\ScrapingFurukawa\chromedriver.exe')
 #driver = webdriver.Chrome(executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\Protocolo HTTP\chromedriver_win32\chromedriver.exe')
 
 listaProdutos = []
@@ -17,7 +17,7 @@ cont = 0
 while cont != 232:
     cont +=1
     
-    url = (f'https://www.furukawalatam.com/pt-br/catalogo-de-produtos-categoria/FIS?page={cont}')
+    url = (f'https://www.furukawalatam.com/pt-br/catalogo-de-produtos-categoria/FBS?page={cont}')
     driver.get(url)
 
     time.sleep(15)
@@ -43,7 +43,7 @@ driver.quit()
 
 #Gera arquivo e preenche os dados coletados.
 
-with open('C:/xampp/htdocs/diretorio/Web-Scraping/Relatorios.csv/Scraping-Furukawa-FIS.csv', 'a', encoding='utf=8') as file:
+with open('C:/xampp/htdocs/diretorio/Web-Scraping/Relatorios.csv/Scraping-Furukawa-FBS.csv', 'a', encoding='utf=8') as file:
     tamanhoLista = len(listaProdutos)
     tamanhoLista - 1
     indice = 0
