@@ -13,8 +13,8 @@ cadastro = []
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--headless')
-#driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\ScrapingCota\chromedriver.exe')
-driver = webdriver.Chrome(executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\ScrapingCota\chromedriver.exe')
+driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\ScrapingCota\chromedriver.exe')
+#driver = webdriver.Chrome(executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\ScrapingCota\chromedriver.exe')
 
 url = (f'https://gpcabling.com.br/session')
 driver.get(url)
@@ -29,19 +29,22 @@ passowrd_element.send_keys('sofia789@')
 
 driver.find_element_by_xpath("//button[@class='btn btn-primary btn-large']").click()
 
-QtdUsuarioPage = 2
-ultimaPage = 1
+QtdUsuarioPage = 34
+ultimaPage = 2
 usuario = 10724
 page = 0
 cont = 1
-while page != ultimaPage:
+while page != ultimaPage + 1:
     page +=1
     driver.get(f'https://gpcabling.com.br/usuario/index?page={page}')
+
+    time.sleep(2)
 
     while cont != QtdUsuarioPage:
         cont +=1
         element = driver.find_element_by_id('tb-user-status')
         element = driver.find_element_by_id(f'row-user-{usuario}')
+        usuario - 1
 
         html_content = element.get_attribute("outerHTML")
         soup = BeautifulSoup(html_content, 'html.parser')
@@ -58,7 +61,6 @@ while page != ultimaPage:
                 vendedor.append(distribuidor[2])
                 email.append(distribuidor[3])
                 cadastro.append(distribuidor[4])
-        usuario - 1
 
 with open('C:/xampp/htdocs/diretorio/Web-Scraping/Relatorios.csv/Scraping-COTA.csv', 'a', encoding='utf=8') as file:
     indice = 0
