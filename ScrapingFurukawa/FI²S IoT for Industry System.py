@@ -43,7 +43,7 @@ driver.quit()
 
 #Gera arquivo e preenche os dados coletados.
 
-with open('C:/xampp/htdocs/diretorio/Web-Scraping/Relatorios.csv/Scraping-Furukawa-FIS.csv', 'a', encoding='utf=8') as file:
+with open('C:/xampp/htdocs/diretorio/Web-Scraping/Relatorios/Scraping-Furukawa-FIS.csv', 'a', encoding='utf=8') as file:
     tamanhoLista = len(listaProdutos)
     tamanhoLista - 1
     indice = 0
