@@ -12,8 +12,8 @@ cadastro = []
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--headless')
-#driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\ScrapingCota\chromedriver.exe')
-driver = webdriver.Chrome(executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\ScrapingCota\chromedriver.exe')
+driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\ScrapingCota\chromedriver.exe')
+#driver = webdriver.Chrome(executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\ScrapingCota\chromedriver.exe')
 
 url = (f'https://gpcabling.com.br/session')
 driver.get(url)
@@ -28,9 +28,9 @@ passowrd_element.send_keys('sofia789@')
 
 driver.find_element_by_xpath("//button[@class='btn btn-primary btn-large']").click()
 
-QtdUsuarioPage = 10
+QtdUsuarioPage = 125
 ultimaPage = 1
-usuario = 10727
+usuario = 10737
 page = 0
 while page != ultimaPage:
     cont = 0
@@ -75,26 +75,6 @@ with open('C:/xampp/htdocs/diretorio/Web-Scraping/Relatorios/Scraping-COTA.csv',
         escreveVendedor = vendedor[indice]
         escreveEmail = email[indice]
         escreveCadastro = cadastro[indice]
-
-        escreveStatus = escreveStatus.replace("\r", "")
-        escreveStatus = escreveStatus.replace("\t", "")
-        escreveStatus = escreveStatus.replace("\n", "")
-
-        escreveEmpresa = escreveEmpresa.replace("\r", "")
-        escreveEmpresa = escreveEmpresa.replace("\t", "")
-        escreveEmpresa = escreveEmpresa.replace("\n", "")
-
-        escreveVendedor = escreveVendedor.replace("\r", "")
-        escreveVendedor = escreveVendedor.replace("\t", "")
-        escreveVendedor = escreveVendedor.replace("\n", "")
-
-        escreveEmail = escreveEmail.replace("\r", "")
-        escreveEmail = escreveEmail.replace("\t", "")
-        escreveEmail = escreveEmail.replace("\n", "")
-
-        escreveCadastro = escreveCadastro.replace("\r", "")
-        escreveCadastro = escreveCadastro.replace("\t", "")
-        escreveCadastro = escreveCadastro.replace("\n", "")        
 
         file.write(f'{escreveStatus} § {escreveEmpresa} § {escreveVendedor} § {escreveEmail} § {escreveCadastro}')
         file.write('\n')
