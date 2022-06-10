@@ -62,7 +62,8 @@ while page != ultimaPage:
                 vendedor.append(distribuidorConteudo[2])
                 email.append(distribuidorConteudo[3])
                 cadastro.append(distribuidorConteudo[4])
-                cont +=1
+            distribuidorConteudo.clear()
+            cont +=1
 
 #importe o pandas para converter a lista em uma planilha
 import pandas as pd
