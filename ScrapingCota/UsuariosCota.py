@@ -28,7 +28,7 @@ passowrd_element.send_keys('sofia789@')
 
 driver.find_element_by_xpath("//button[@class='btn btn-primary btn-large']").click()
 
-QtdUsuarioPage = 125
+QtdUsuarioPage = 100
 ultimaPage = 1
 usuario = 10737
 page = 0
@@ -48,7 +48,7 @@ while page != ultimaPage:
         html_content = element.get_attribute("outerHTML")
         soup = BeautifulSoup(html_content, 'html.parser')
 
-        for conteudoTag in soup.find_all("td", limit=5):
+        for conteudoTag in soup.find_all("td"):
             conteudoTag = conteudoTag.get_text()
             conteudoTag = conteudoTag.strip()
             conteudoTag = conteudoTag.replace("\r", "")
@@ -62,24 +62,27 @@ while page != ultimaPage:
                 vendedor.append(distribuidorConteudo[2])
                 email.append(distribuidorConteudo[3])
                 cadastro.append(distribuidorConteudo[4])
+                cont +=1
 
-                distribuidorConteudo.clear()
+#importe o pandas para converter a lista em uma planilha
+import pandas as pd
 
-with open('C:/xampp/htdocs/diretorio/Web-Scraping/Relatorios/Scraping-COTA.csv', 'a', encoding='utf=8') as file:
-    indice = 0
-    tamanhoLista = len(empresa)
-    tamanhoLista - 1
-    while indice != tamanhoLista:
-        escreveStatus = status[indice]
-        escreveEmpresa = empresa[indice]
-        escreveVendedor = vendedor[indice]
-        escreveEmail = email[indice]
-        escreveCadastro = cadastro[indice]
+df = pd.DataFrame(columns=['Status'])
 
-        file.write(f'{escreveStatus} § {escreveEmpresa} § {escreveVendedor} § {escreveEmail} § {escreveCadastro}')
-        file.write('\n')
-        indice +=1
+df['Status']=status
+df['Empresa']=empresa
+df['Vendedor']=vendedor
+df['Email']=email
+df['Cadastro']=cadastro
 
-    file.close()
+print(df)
 
-driver.quit()
+#writing to Excel
+datatoexcel = pd.ExcelWriter('C:/xampp/htdocs/diretorio/Web-Scraping/Relatorios/Scraping-COTA.xlsx')
+
+# write DataFrame to excel
+df.to_excel(datatoexcel)
+
+# save the excel
+datatoexcel.save()
+print('DataFrame is written to Excel File successfully.')

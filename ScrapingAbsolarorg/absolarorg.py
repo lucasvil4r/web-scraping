@@ -24,11 +24,14 @@ element = driver.find_element_by_xpath("//div[@class='row associates-itens']")
 html_content = element.get_attribute("outerHTML")
 soup = BeautifulSoup(html_content, "html.parser")
 
-for conteudoTag in soup.find_all("p", limit=4):
+for conteudoTag in soup.findAll("p", limit=4):
     conteudoTag = conteudoTag.get_text()
     conteudoTag = conteudoTag.strip()
     conteudoTag = conteudoTag.replace("\t", " ")
     conteudoTag = conteudoTag.replace("\n", " ")
+    conteudoTag = conteudoTag.replace("Ver e-mail", "")
+    conteudoTag = conteudoTag.replace("Ver site", "")
+    conteudoTag = conteudoTag.strip()
     distribuidorConteudo.append(conteudoTag)
     if len(distribuidorConteudo) == 4:
         empresa.append(distribuidorConteudo[0])
@@ -36,28 +39,24 @@ for conteudoTag in soup.find_all("p", limit=4):
         telefone.append(distribuidorConteudo[2])
         site.append(distribuidorConteudo[3])
 
-        distribuidorConteudo.clear()
+#importe o pandas para converter a lista em uma planilha
+import pandas as pd
 
-with open('C:/xampp/htdocs/diretorio/Web-Scraping/Relatorios/Scraping-ABSOLAR.csv', 'a', encoding='utf=8') as file:
-    tamanhoLista = len(empresa)
-    tamanhoLista - 1
-    indice = 0
-    while indice != tamanhoLista:
-        escreveEmpresa = empresa[indice]
-        escreveEmail = email[indice]
-        escreveTelefone = telefone[indice]
-        escreveSite = site[indice]
+df = pd.DataFrame(columns=['Empresa'])
 
-        escreveEmail = escreveEmail.replace("Ver e-mail", "")
-        escreveEmail = escreveEmail.strip()
+df['Empresa']=empresa
+df['Email']=email
+df['Telefone']=telefone
+df['Site']=site
 
-        escreveSite = escreveSite.replace("Ver site", "")
-        escreveSite = escreveSite.strip()
+print(df)
 
-        file.write(f'{escreveEmpresa} § {escreveEmail} § {escreveTelefone} § {escreveSite}')
-        file.write('\n')
-        indice +=1
+#writing to Excel
+datatoexcel = pd.ExcelWriter('C:/xampp/htdocs/diretorio/Web-Scraping/Relatorios/Scraping-ABSOLAR.xlsx')
 
-    file.close()
+# write DataFrame to excel
+df.to_excel(datatoexcel)
 
-driver.quit()
+# save the excel
+datatoexcel.save()
+print('DataFrame is written to Excel File successfully.')
