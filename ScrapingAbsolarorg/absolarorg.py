@@ -17,145 +17,54 @@ driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=r'C:\xa
 url = (f'https://www.absolar.org.br/nossos-associados/')
 driver.get(url)
 
-time.sleep(5)
+time.sleep(10)
 
 element = driver.find_element_by_xpath("//div[@class='row associates-itens']")
 
-element = driver.find_element_by_xpath(f"//div[{12}][contains(@class, 'col-6 col-md-3 associate-wrap-item')]")
+qtdEmpresaPage = 11
+cont = 1
 
-html_content = element.get_attribute("outerHTML")
-soup = BeautifulSoup(html_content, "html.parser")
+while cont != qtdEmpresaPage:
+    element = driver.find_element_by_xpath(f"//div[{cont}][contains(@class, 'col-6 col-md-3 associate-wrap-item')]")
+    cont +=1
 
-for conteudoTag in soup.findAll("p", limit=4):
-    conteudoTag = conteudoTag.get_text()
-    conteudoTag = conteudoTag.replace("\t", " ")
-    conteudoTag = conteudoTag.replace("\n", " ")
-    conteudoTag = conteudoTag.replace("\r", "")
-    conteudoTag = conteudoTag.replace(",", ".")
-    conteudoTag = conteudoTag.strip()
-    distribuidorConteudo.append(conteudoTag)
+    html_content = element.get_attribute("outerHTML")
+    soup = BeautifulSoup(html_content, "html.parser")
 
-    if len(distribuidorConteudo) == 1:
+    for conteudoTag in soup.findAll("p", limit = 4):
+        conteudoTag = conteudoTag.get_text()
+        conteudoTag = conteudoTag.replace("\t", " ")
+        conteudoTag = conteudoTag.replace("\n", " ")
+        conteudoTag = conteudoTag.replace("\r", "")
+        conteudoTag = conteudoTag.replace(",", ".")
+        conteudoTag = conteudoTag.strip()
+        distribuidorConteudo.append(conteudoTag)
+        qtdDistribuidor = len(distribuidorConteudo)
 
+        if len(distribuidorConteudo) == 4:
+            empresa.append(distribuidorConteudo[0])
 
-        if '@' in distribuidorConteudo[0]:
-            email.append(distribuidorConteudo[0])
-            distribuidorConteudo.pop(0)
-        else:
-            email.append(" ")
-        
+            recebeEmail = 'Ver e-mail' in distribuidorConteudo[1]
+            if recebeEmail == True:
+                email.append(distribuidorConteudo[1])
+            elif recebeEmail == False:
+                email.insert(1, "Null")
 
-        elif 'Tel. (' in distribuidorConteudo[0]:
-            telefone.append(distribuidorConteudo[0])
-            distribuidorConteudo.pop(0)
-        else:
+            recebeTel = 'Tel' in distribuidorConteudo[2]
+            if recebeTel == True:
+                telefone.append(distribuidorConteudo[2])
+            elif recebeTel == False:
+                telefone.insert(2, "Null")
 
-            telefone.append(" ")
+            recebeSite = 'Ver site' in distribuidorConteudo[3]
+            if recebeSite == True:
+                site.append(distribuidorConteudo[3])
+            elif recebeSite == False:
+                site.insert(3, "Null")
 
-        elif 'Ver site' in distribuidorConteudo[0]:
+            distribuidorConteudo.clear()
 
-            site.append(distribuidorConteudo[0])
-            distribuidorConteudo.pop(0)
-
-        else:
-            
-            site.append(" ")
-        
-        empresa.append(distribuidorConteudo[0])
-        distribuidorConteudo.pop(0)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'''
-for conteudoTag in soup.findAll("p", limit=4):
-    conteudoTag = conteudoTag.get_text()
-    conteudoTag = conteudoTag.strip()
-    conteudoTag = conteudoTag.replace("\t", " ")
-    conteudoTag = conteudoTag.replace("\n", " ")
-    conteudoTag = conteudoTag.replace("Ver e-mail", "")
-    conteudoTag = conteudoTag.replace("Ver site", "")
-    conteudoTag = conteudoTag.strip()
-    distribuidorConteudo.append(conteudoTag)
-    if len(distribuidorConteudo) == 4:
-        empresa.append(distribuidorConteudo[0])
-        email.append(distribuidorConteudo[1])
-        telefone.append(distribuidorConteudo[2])
-        site.append(distribuidorConteudo[3])
-
-
-
-
-
-
-
-
-for test in soup:
-    conteudoTagEmpresa = test.find("p", attrs={'my-3 absolar-text-13'})
-    conteudoTagEmail = test.find("p", attrs={'tooltip1'})
-    conteudoTagSite = test.find("span", attrs={'tooltiptext'})
-
-    conteudoTagEmpresa = conteudoTagEmpresa.get_text()
-    conteudoTagEmpresa = conteudoTagEmpresa.strip()
-    conteudoTagEmpresa = conteudoTagEmpresa.replace("\t", "")
-    conteudoTagEmpresa = conteudoTagEmpresa.replace("\n", "")
-    empresa.append(conteudoTagEmpresa)
-
-    conteudoTagEmail = conteudoTagEmail.get_text()
-    conteudoTagEmail = conteudoTagEmail.strip()
-    conteudoTagEmail = conteudoTagEmail.replace("\t", "")
-    conteudoTagEmail = conteudoTagEmail.replace("\n", "")
-    email.append(conteudoTagEmail)
-
-    conteudoTagTelefone = conteudoTagTelefone.get_text()
-    conteudoTagTelefone = conteudoTagTelefone.strip()
-    conteudoTagTelefone = conteudoTagTelefone.replace("Ver site", "")
-    conteudoTagTelefone = conteudoTagTelefone.replace("\t", "")
-    conteudoTagTelefone = conteudoTagTelefone.replace("\n", "")
-    telefone.append(conteudoTagTelefone)
-
-    conteudoTagSite = conteudoTagSite.get_text()
-    conteudoTagSite = conteudoTagSite.strip()
-    conteudoTagSite = conteudoTagSite.replace("Ver site", "")
-    conteudoTagSite = conteudoTagSite.replace("\t", "")
-    conteudoTagSite = conteudoTagSite.replace("\n", "")
-    site.append(conteudoTagSite)
+driver.quit()
 
 #importe o pandas para converter a lista em uma planilha
 
@@ -170,15 +79,18 @@ df['Site']=site
 
 print(df)
 
+'''
 #writing to Excel
+
 datatoexcel = pd.ExcelWriter('C:/xampp/htdocs/diretorio/Web-Scraping/Relatorios/Scraping-ABSOLAR.xlsx')
 
 # write DataFrame to excel
+
 df.to_excel(datatoexcel)
 
 # save the excel
+
 datatoexcel.save()
+
 print('DataFrame is written to Excel File successfully.')
 '''
-
-driver.quit()
