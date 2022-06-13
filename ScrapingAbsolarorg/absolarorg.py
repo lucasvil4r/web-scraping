@@ -15,8 +15,7 @@ site = []
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--headless')
-#driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\ScrapingAbsolarorg\chromedriver.exe')
-driver = webdriver.Chrome(executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\ScrapingAbsolarorg\chromedriver.exe')
+driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\ScrapingAbsolarorg\chromedriver.exe')
 
 url = (f'https://www.absolar.org.br/nossos-associados/')
 driver.get(url)
@@ -37,8 +36,8 @@ while contadorEmpresa != qtdEmpresaPage:
 
     for conteudoTag in soup.findAll("p", limit=4):
         conteudoTag = conteudoTag.get_text()
-        conteudoTag = conteudoTag.replace("\t", " ")
-        conteudoTag = conteudoTag.replace("\n", " ")
+        conteudoTag = conteudoTag.replace("\t", "")
+        conteudoTag = conteudoTag.replace("\n", "")
         conteudoTag = conteudoTag.replace("\r", "")
         conteudoTag = conteudoTag.replace(",", ".")
         conteudoTag = conteudoTag.strip()
