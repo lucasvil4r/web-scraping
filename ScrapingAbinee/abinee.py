@@ -38,7 +38,7 @@ while page != qtdPage:
         soup = BeautifulSoup(html_content, "html.parser")
 
         nomeEmpresa = soup.find('h1', attrs={'titulo'})
-        print(nomeEmpresa)
+        title = soup.find('h2', attrs={'titulo'})
 
         for conteudoTag in soup.findAll("p", limit=4):
             conteudoTag = conteudoTag.get_text()
