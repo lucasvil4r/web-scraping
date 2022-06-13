@@ -4,6 +4,10 @@ from selenium import webdriver
 from selenium.webdriver.firefox.options import  Options
 
 distribuidorConteudo = []
+empresaCobaia = []
+emailCobaia = []
+telefoneCobaia = []
+siteCobaia = []
 empresa = []
 email = []
 telefone = []
@@ -17,21 +21,21 @@ driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=r'C:\xa
 url = (f'https://www.absolar.org.br/nossos-associados/')
 driver.get(url)
 
-time.sleep(10)
+time.sleep(5)
 
 element = driver.find_element_by_xpath("//div[@class='row associates-itens']")
 
-qtdEmpresaPage = 11
-cont = 1
+qtdEmpresaPage = 10
+contadorEmpresa = 1
 
-while cont != qtdEmpresaPage:
-    element = driver.find_element_by_xpath(f"//div[{cont}][contains(@class, 'col-6 col-md-3 associate-wrap-item')]")
-    cont +=1
+while contadorEmpresa != qtdEmpresaPage:
+    element = driver.find_element_by_xpath(f"//div[{contadorEmpresa}][contains(@class, 'col-6 col-md-3 associate-wrap-item')]")
+    contadorEmpresa +=1
 
     html_content = element.get_attribute("outerHTML")
     soup = BeautifulSoup(html_content, "html.parser")
 
-    for conteudoTag in soup.findAll("p", limit = 4):
+    for conteudoTag in soup.findAll("p", limit=4):
         conteudoTag = conteudoTag.get_text()
         conteudoTag = conteudoTag.replace("\t", " ")
         conteudoTag = conteudoTag.replace("\n", " ")
@@ -39,30 +43,42 @@ while cont != qtdEmpresaPage:
         conteudoTag = conteudoTag.replace(",", ".")
         conteudoTag = conteudoTag.strip()
         distribuidorConteudo.append(conteudoTag)
-        qtdDistribuidor = len(distribuidorConteudo)
 
-        if len(distribuidorConteudo) == 4:
-            empresa.append(distribuidorConteudo[0])
+        if len(distribuidorConteudo) == 1:
 
-            recebeEmail = 'Ver e-mail' in distribuidorConteudo[1]
+            recebeEmail = 'Ver e-mail' in distribuidorConteudo[0]
+            recebeTel = 'Tel.' in distribuidorConteudo[0]
+            recebeSite = 'Ver site' in distribuidorConteudo[0]
+
             if recebeEmail == True:
-                email.append(distribuidorConteudo[1])
-            elif recebeEmail == False:
-                email.insert(1, "Null")
-
-            recebeTel = 'Tel' in distribuidorConteudo[2]
-            if recebeTel == True:
-                telefone.append(distribuidorConteudo[2])
-            elif recebeTel == False:
-                telefone.insert(2, "Null")
-
-            recebeSite = 'Ver site' in distribuidorConteudo[3]
-            if recebeSite == True:
-                site.append(distribuidorConteudo[3])
-            elif recebeSite == False:
-                site.insert(3, "Null")
+                emailCobaia.append(distribuidorConteudo[0])
+            elif recebeTel == True:
+                telefoneCobaia.append(distribuidorConteudo[0])
+            elif recebeSite == True:
+                siteCobaia.append(distribuidorConteudo[0])
+            else:
+                empresaCobaia.append(distribuidorConteudo[0])
 
             distribuidorConteudo.clear()
+
+    if len(empresaCobaia) == 0:
+        empresaCobaia.append("null")
+    if len(emailCobaia) == 0:
+        emailCobaia.append("null")
+    if len(telefoneCobaia) == 0:
+        telefoneCobaia.append("null")
+    if len(siteCobaia) == 0:
+        siteCobaia.append("null")
+
+    empresa.append(empresaCobaia[0])
+    email.append(emailCobaia[0])
+    telefone.append(telefoneCobaia[0])
+    site.append(siteCobaia[0])
+
+    empresaCobaia.clear()
+    emailCobaia.clear()
+    telefoneCobaia.clear()
+    siteCobaia.clear()
 
 driver.quit()
 
