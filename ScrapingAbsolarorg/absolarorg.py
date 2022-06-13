@@ -15,8 +15,8 @@ site = []
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--headless')
-driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\ScrapingAbsolarorg\chromedriver.exe')
-#driver = webdriver.Chrome(executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\ScrapingAbsolarorg\chromedriver.exe')
+#driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\ScrapingAbsolarorg\chromedriver.exe')
+driver = webdriver.Chrome(executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\ScrapingAbsolarorg\chromedriver.exe')
 
 url = (f'https://www.absolar.org.br/nossos-associados/')
 driver.get(url)
@@ -25,7 +25,7 @@ time.sleep(5)
 
 element = driver.find_element_by_xpath("//div[@class='row associates-itens']")
 
-qtdEmpresaPage = 10
+qtdEmpresaPage = 693
 contadorEmpresa = 1
 
 while contadorEmpresa != qtdEmpresaPage:
@@ -50,12 +50,24 @@ while contadorEmpresa != qtdEmpresaPage:
             recebeTel = 'Tel.' in distribuidorConteudo[0]
             recebeSite = 'Ver site' in distribuidorConteudo[0]
 
+            formataEmail = distribuidorConteudo[0]
+            formtaTel = distribuidorConteudo[0]
+            formataSite = distribuidorConteudo[0]
+
             if recebeEmail == True:
-                emailCobaia.append(distribuidorConteudo[0])
+                formataEmail = formataEmail.replace('Ver e-mail', "")
+                formataEmail = formataEmail.strip()
+                emailCobaia.append(formataEmail)
+
             elif recebeTel == True:
-                telefoneCobaia.append(distribuidorConteudo[0])
+                formtaTel = formtaTel.replace('Tel.', "")
+                formtaTel = formtaTel.strip()
+                telefoneCobaia.append(formtaTel)
+
             elif recebeSite == True:
-                siteCobaia.append(distribuidorConteudo[0])
+                formataSite = formataSite.replace('Ver site', "")
+                formataSite = formataSite.strip()
+                siteCobaia.append(formataSite)
             else:
                 empresaCobaia.append(distribuidorConteudo[0])
 
@@ -95,7 +107,6 @@ df['Site']=site
 
 print(df)
 
-'''
 #writing to Excel
 
 datatoexcel = pd.ExcelWriter('C:/xampp/htdocs/diretorio/Web-Scraping/Relatorios/Scraping-ABSOLAR.xlsx')
@@ -109,4 +120,3 @@ df.to_excel(datatoexcel)
 datatoexcel.save()
 
 print('DataFrame is written to Excel File successfully.')
-'''
