@@ -21,13 +21,14 @@ endereco = []
 CepCidade = []
 contato = []
 produtos = []
+numCliente = []
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--headless')
 driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\ScrapingAbinee\chromedriver.exe')
 
 qtdPage = 20
-page = 2
+page = 1
 
 while page != qtdPage:
 
@@ -65,9 +66,7 @@ while page != qtdPage:
             distribuidorConteudo.append(conteudoTag)
 
             if len(distribuidorConteudo) == 1:
-                formata = distribuidorConteudo[0]
-                formata = formata.strip(nomeRepresentante)
-                cargoRepresentante.append(formata)
+                cargoRepresentante.append(distribuidorConteudo[0])
             if len(distribuidorConteudo) == 2:
                 endereco.append(distribuidorConteudo[1])
             if len(distribuidorConteudo) == 3:
@@ -77,10 +76,10 @@ while page != qtdPage:
             if len(distribuidorConteudo) > 4:
                 produtos.append(distribuidorConteudo[indice])
 
-        indice +=1
-        page +=1
         distribuidorConteudo.clear()
-        
+        numCliente.append(page)
+        page +=1
+        indice +=1
     else:
 
         page +=1
@@ -106,6 +105,7 @@ df['Cargo Representante']=cargoRepresentante
 df['Endereço']=endereco
 df['Cep/Cidade']=CepCidade
 df['Contato']=contato
+df['Cliente Nº']=numCliente
 
 print(df)
 
