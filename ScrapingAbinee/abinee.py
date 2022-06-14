@@ -27,7 +27,7 @@ chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--headless')
 driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\ScrapingAbinee\chromedriver.exe')
 
-qtdPage = 20
+qtdPage = 200
 page = 1
 
 while page != qtdPage:
@@ -66,7 +66,9 @@ while page != qtdPage:
             distribuidorConteudo.append(conteudoTag)
 
             if len(distribuidorConteudo) == 1:
-                cargoRepresentante.append(distribuidorConteudo[0])
+                excluiNome = distribuidorConteudo[0]
+                excluiNome = excluiNome.replace(nomeRepresentante, '')
+                cargoRepresentante.append(excluiNome)
             if len(distribuidorConteudo) == 2:
                 endereco.append(distribuidorConteudo[1])
             if len(distribuidorConteudo) == 3:
@@ -85,14 +87,7 @@ while page != qtdPage:
         page +=1
 
 driver.quit()
-'''
-print(empresa)
-print(representante)
-print(cargoRepresentante)
-print(endereco)
-print(contato)
-#print(produtos)
-'''
+
 #importe o pandas para converter a lista em uma planilha
 
 import pandas as pd
