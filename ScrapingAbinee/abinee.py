@@ -27,8 +27,8 @@ chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--headless')
 driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\ScrapingAbinee\chromedriver.exe')
 
-qtdPage = 200
 page = 1
+qtdPage = 9100
 
 while page != qtdPage:
 
@@ -37,11 +37,11 @@ while page != qtdPage:
     response = requests.get(url)
     retorno = response.status_code
 
-    if retorno >= 200 and retorno <= 299:
+    if retorno != 400 and retorno != 401 and retorno != 403 and retorno != 404 and retorno != 500:
 
         driver.get(url)
 
-        time.sleep(2)
+        time.sleep(4)
 
         element = driver.find_element_by_xpath("//div[@class='conteudo_geral']")
 
