@@ -18,7 +18,6 @@ empresa = []
 representante = []
 cargoRepresentante = []
 endereco = []
-CepCidade = []
 contato = []
 produtos = []
 numCliente = []
@@ -28,20 +27,20 @@ chrome_options.add_argument('--headless')
 driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\ScrapingAbinee\chromedriver.exe')
 
 page = 1
-qtdPage = 9100
+qtdPage = 30
 
 while page != qtdPage:
 
     url = (f'http://www.abinee.org.br/abinee/associa/filiados/{page}.htm')
 
-    response = requests.get(url)
+    response = requests.get(url, timeout=10)
     retorno = response.status_code
-
-    if retorno != 400 and retorno != 401 and retorno != 403 and retorno != 404 and retorno != 500:
+    
+    if retorno != 404:
 
         driver.get(url)
 
-        time.sleep(4)
+        time.sleep(5)
 
         element = driver.find_element_by_xpath("//div[@class='conteudo_geral']")
 
@@ -52,6 +51,8 @@ while page != qtdPage:
             nomeEmpresa = nomeEmpresa.get_text()
             nomeEmpresa = nomeEmpresa.strip()
             empresa.append(nomeEmpresa)
+
+            qtdEmpresa = len(empresa) - 1
 
         for nomeRepresentante in soup.find('strong'):
             nomeRepresentante = nomeRepresentante.get_text()
@@ -69,15 +70,24 @@ while page != qtdPage:
                 excluiNome = distribuidorConteudo[0]
                 excluiNome = excluiNome.replace(nomeRepresentante, '')
                 cargoRepresentante.append(excluiNome)
+
             if len(distribuidorConteudo) == 2:
-                endereco.append(distribuidorConteudo[1])
+                recebeEndPT1 = distribuidorConteudo[1]
+
             if len(distribuidorConteudo) == 3:
-                CepCidade.append(distribuidorConteudo[2])
+                recebeEndPT2 = distribuidorConteudo[2]
+
             if len(distribuidorConteudo) == 4:
                 contato.append(distribuidorConteudo[3])
-            if len(distribuidorConteudo) > 4:
-                produtos.append(distribuidorConteudo[indice])
 
+            if len(distribuidorConteudo) == 5:
+                produtos.append(distribuidorConteudo[4])
+
+            if len(distribuidorConteudo) > 5:
+                recebeProduto = distribuidorConteudo[indice]
+                produtos[qtdEmpresa] = recebeProduto +" - "+ produtos[qtdEmpresa]
+
+        endereco.append(recebeEndPT1 +" · "+recebeEndPT2)
         distribuidorConteudo.clear()
         numCliente.append(page)
         page +=1
@@ -98,8 +108,8 @@ df['Empresa']=empresa
 df['Representante']=representante
 df['Cargo Representante']=cargoRepresentante
 df['Endereço']=endereco
-df['Cep/Cidade']=CepCidade
 df['Contato']=contato
+df['Produtos']=produtos
 df['Filiado Nº']=numCliente
 
 print(df)
