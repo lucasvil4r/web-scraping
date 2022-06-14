@@ -37,7 +37,7 @@ while page != qtdPage:
     response = requests.get(url)
     retorno = response.status_code
 
-    if retorno != 404:
+    if retorno >= 200 and retorno <= 299:
 
         driver.get(url)
 
@@ -100,7 +100,7 @@ df['Cargo Representante']=cargoRepresentante
 df['Endereço']=endereco
 df['Cep/Cidade']=CepCidade
 df['Contato']=contato
-df['Cliente Nº']=numCliente
+df['Filiado Nº']=numCliente
 
 print(df)
 
