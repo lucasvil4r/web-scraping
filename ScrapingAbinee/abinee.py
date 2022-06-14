@@ -14,25 +14,25 @@ contato = []
 produtos = []
 numCliente = []
 
-chrome_options = webdriver.ChromeOptions()
-chrome_options.add_argument('--headless')
-driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\ScrapingAbinee\chromedriver.exe')
-
 page = 1
-qtdPage = 1000
+qtdPage = 10000
 
 while page != qtdPage:
 
     url = (f'http://www.abinee.org.br/abinee/associa/filiados/{page}.htm')
 
-    response = requests.get(url, timeout=30)
+    response = requests.get(url)
     retorno = response.status_code
     
     if retorno != 404:
 
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument('--headless')
+        driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\ScrapingAbinee\chromedriver.exe')
+
         driver.get(url)
 
-        time.sleep(5)
+        time.sleep(3)
 
         element = driver.find_element_by_xpath("//div[@class='conteudo_geral']")
 
@@ -83,10 +83,9 @@ while page != qtdPage:
         numCliente.append(page)
         page +=1
         indice +=1
+        driver.quit()
     else:
         page +=1
-
-driver.quit()
 
 #importe o pandas para converter a lista em uma planilha
 
