@@ -4,20 +4,12 @@ from selenium import webdriver
 from selenium.webdriver.firefox.options import  Options
 import requests
 
-#Códigos de Status
-#A primeira coisa que podemos fazer é verificar o código de status. Os códigos HTTP variam de 1XX a 5XX. Os códigos de status comuns que você provavelmente viu são 200, 404 e 500.
-#Aqui está uma visão geral rápida do que cada código de status significa:
-#1XX - Informação
-#2XX - Sucesso
-#3XX - Redirecionar
-#4XX - Erro de cliente (você cometeu um erro)
-#5XX - Erro de servidor (eles cometeram um erro)
-
 distribuidorConteudo = []
 empresa = []
 representante = []
 cargoRepresentante = []
 endereco = []
+cep = []
 contato = []
 produtos = []
 numCliente = []
@@ -27,13 +19,13 @@ chrome_options.add_argument('--headless')
 driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\ScrapingAbinee\chromedriver.exe')
 
 page = 1
-qtdPage = 30
+qtdPage = 5
 
 while page != qtdPage:
 
     url = (f'http://www.abinee.org.br/abinee/associa/filiados/{page}.htm')
 
-    response = requests.get(url, timeout=10)
+    response = requests.get(url, timeout=30)
     retorno = response.status_code
     
     if retorno != 404:
@@ -72,10 +64,10 @@ while page != qtdPage:
                 cargoRepresentante.append(excluiNome)
 
             if len(distribuidorConteudo) == 2:
-                recebeEndPT1 = distribuidorConteudo[1]
+                endereco.append(distribuidorConteudo[1])
 
             if len(distribuidorConteudo) == 3:
-                recebeEndPT2 = distribuidorConteudo[2]
+                cep.append(distribuidorConteudo[2])
 
             if len(distribuidorConteudo) == 4:
                 contato.append(distribuidorConteudo[3])
@@ -85,15 +77,13 @@ while page != qtdPage:
 
             if len(distribuidorConteudo) > 5:
                 recebeProduto = distribuidorConteudo[indice]
-                produtos[qtdEmpresa] = recebeProduto +" - "+ produtos[qtdEmpresa]
+                produtos[qtdEmpresa] = produtos[qtdEmpresa]+" - "+ recebeProduto
 
-        endereco.append(recebeEndPT1 +" · "+recebeEndPT2)
         distribuidorConteudo.clear()
         numCliente.append(page)
         page +=1
         indice +=1
     else:
-
         page +=1
 
 driver.quit()
@@ -106,10 +96,11 @@ df = pd.DataFrame(columns=['Empresa'])
 
 df['Empresa']=empresa
 df['Representante']=representante
-df['Cargo Representante']=cargoRepresentante
+df['Cargo representante']=cargoRepresentante
 df['Endereço']=endereco
+df['CEP']=cep
 df['Contato']=contato
-df['Produtos']=produtos
+df['Produtos relacionados']=produtos
 df['Filiado Nº']=numCliente
 
 print(df)
