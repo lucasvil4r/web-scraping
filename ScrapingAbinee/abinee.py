@@ -19,7 +19,7 @@ chrome_options.add_argument('--headless')
 driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\ScrapingAbinee\chromedriver.exe')
 
 page = 1
-qtdPage = 5
+qtdPage = 1000
 
 while page != qtdPage:
 
