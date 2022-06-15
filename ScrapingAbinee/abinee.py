@@ -14,8 +14,12 @@ contato = []
 produtos = []
 numCliente = []
 
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_argument('--headless')
+driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\ScrapingAbinee\chromedriver.exe')
+
 page = 1
-qtdPage = 10000
+qtdPage = 100
 
 while page != qtdPage:
 
@@ -23,12 +27,14 @@ while page != qtdPage:
 
     response = requests.get(url)
     retorno = response.status_code
-    
-    if retorno != 404:
 
+    if retorno == 408:
+        driver.quit()
         chrome_options = webdriver.ChromeOptions()
         chrome_options.add_argument('--headless')
         driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\ScrapingAbinee\chromedriver.exe')
+        
+    if retorno != 404:
 
         driver.get(url)
 
@@ -83,9 +89,10 @@ while page != qtdPage:
         numCliente.append(page)
         page +=1
         indice +=1
-        driver.quit()
     else:
         page +=1
+
+driver.quit()
 
 #importe o pandas para converter a lista em uma planilha
 
@@ -104,6 +111,7 @@ df['Filiado Nº']=numCliente
 
 print(df)
 
+'''
 #writing to Excel
 
 datatoexcel = pd.ExcelWriter('C:/xampp/htdocs/diretorio/Web-Scraping/Relatorios/Scraping-ABINEE.xlsx')
@@ -117,3 +125,4 @@ df.to_excel(datatoexcel)
 datatoexcel.save()
 
 print('DataFrame is written to Excel File successfully.')
+'''
