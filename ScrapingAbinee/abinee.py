@@ -4,21 +4,12 @@ from selenium import webdriver
 from selenium.webdriver.firefox.options import  Options
 import requests
 
-#Códigos de Status
-#A primeira coisa que podemos fazer é verificar o código de status. Os códigos HTTP variam de 1XX a 5XX. Os códigos de status comuns que você provavelmente viu são 200, 404 e 500.
-#Aqui está uma visão geral rápida do que cada código de status significa:
-#1XX - Informação
-#2XX - Sucesso
-#3XX - Redirecionar
-#4XX - Erro de cliente (você cometeu um erro)
-#5XX - Erro de servidor (eles cometeram um erro)
-
 distribuidorConteudo = []
 empresa = []
 representante = []
 cargoRepresentante = []
 endereco = []
-CepCidade = []
+cep = []
 contato = []
 produtos = []
 numCliente = []
@@ -28,7 +19,7 @@ chrome_options.add_argument('--headless')
 driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\ScrapingAbinee\chromedriver.exe')
 
 page = 1
-qtdPage = 9100
+qtdPage = 10000
 
 while page != qtdPage:
 
@@ -37,11 +28,17 @@ while page != qtdPage:
     response = requests.get(url)
     retorno = response.status_code
 
-    if retorno != 400 and retorno != 401 and retorno != 403 and retorno != 404 and retorno != 500:
+    if retorno == 408:
+        driver.quit()
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument('--headless')
+        driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\ScrapingAbinee\chromedriver.exe')
+        
+    if retorno != 404:
 
         driver.get(url)
 
-        time.sleep(4)
+        time.sleep(2)
 
         element = driver.find_element_by_xpath("//div[@class='conteudo_geral']")
 
@@ -53,6 +50,8 @@ while page != qtdPage:
             nomeEmpresa = nomeEmpresa.strip()
             empresa.append(nomeEmpresa)
 
+            qtdEmpresa = len(empresa) - 1
+
         for nomeRepresentante in soup.find('strong'):
             nomeRepresentante = nomeRepresentante.get_text()
             nomeRepresentante = nomeRepresentante.strip()
@@ -60,7 +59,7 @@ while page != qtdPage:
 
         indice = -1
 
-        for conteudoTag in soup.find_all("p"):
+        for conteudoTag in soup.find_all("p", limit=4):
             conteudoTag = conteudoTag.get_text()
             conteudoTag = conteudoTag.strip()
             distribuidorConteudo.append(conteudoTag)
@@ -69,21 +68,21 @@ while page != qtdPage:
                 excluiNome = distribuidorConteudo[0]
                 excluiNome = excluiNome.replace(nomeRepresentante, '')
                 cargoRepresentante.append(excluiNome)
+
             if len(distribuidorConteudo) == 2:
                 endereco.append(distribuidorConteudo[1])
+
             if len(distribuidorConteudo) == 3:
-                CepCidade.append(distribuidorConteudo[2])
+                cep.append(distribuidorConteudo[2])
+
             if len(distribuidorConteudo) == 4:
                 contato.append(distribuidorConteudo[3])
-            if len(distribuidorConteudo) > 4:
-                produtos.append(distribuidorConteudo[indice])
 
         distribuidorConteudo.clear()
         numCliente.append(page)
         page +=1
         indice +=1
     else:
-
         page +=1
 
 driver.quit()
@@ -96,13 +95,11 @@ df = pd.DataFrame(columns=['Empresa'])
 
 df['Empresa']=empresa
 df['Representante']=representante
-df['Cargo Representante']=cargoRepresentante
+df['Cargo representante']=cargoRepresentante
 df['Endereço']=endereco
-df['Cep/Cidade']=CepCidade
+df['CEP']=cep
 df['Contato']=contato
 df['Filiado Nº']=numCliente
-
-print(df)
 
 #writing to Excel
 
