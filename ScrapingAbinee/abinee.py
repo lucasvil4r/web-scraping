@@ -19,7 +19,7 @@ chrome_options.add_argument('--headless')
 driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\ScrapingAbinee\chromedriver.exe')
 
 page = 1
-qtdPage = 100
+qtdPage = 10000
 
 while page != qtdPage:
 
@@ -38,7 +38,7 @@ while page != qtdPage:
 
         driver.get(url)
 
-        time.sleep(3)
+        time.sleep(2)
 
         element = driver.find_element_by_xpath("//div[@class='conteudo_geral']")
 
@@ -59,7 +59,7 @@ while page != qtdPage:
 
         indice = -1
 
-        for conteudoTag in soup.find_all("p"):
+        for conteudoTag in soup.find_all("p", limit=4):
             conteudoTag = conteudoTag.get_text()
             conteudoTag = conteudoTag.strip()
             distribuidorConteudo.append(conteudoTag)
@@ -77,13 +77,6 @@ while page != qtdPage:
 
             if len(distribuidorConteudo) == 4:
                 contato.append(distribuidorConteudo[3])
-
-            if len(distribuidorConteudo) == 5:
-                produtos.append(distribuidorConteudo[4])
-
-            if len(distribuidorConteudo) > 5:
-                recebeProduto = distribuidorConteudo[indice]
-                produtos[qtdEmpresa] = produtos[qtdEmpresa]+" - "+ recebeProduto
 
         distribuidorConteudo.clear()
         numCliente.append(page)
@@ -106,12 +99,8 @@ df['Cargo representante']=cargoRepresentante
 df['Endereço']=endereco
 df['CEP']=cep
 df['Contato']=contato
-df['Produtos relacionados']=produtos
 df['Filiado Nº']=numCliente
 
-print(df)
-
-'''
 #writing to Excel
 
 datatoexcel = pd.ExcelWriter('C:/xampp/htdocs/diretorio/Web-Scraping/Relatorios/Scraping-ABINEE.xlsx')
@@ -125,4 +114,3 @@ df.to_excel(datatoexcel)
 datatoexcel.save()
 
 print('DataFrame is written to Excel File successfully.')
-'''
