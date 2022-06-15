@@ -24,15 +24,34 @@ while page != qtdPage:
 
     url = (f'http://www.abinee.org.br/abinee/associa/filiados/{page}.htm')
 
-    response = requests.get(url)
-    retorno = response.status_code
+    while True:
+        try:
+            response = requests.get(url)
+            retorno = response.status_code
+            break
 
-    if retorno == 408 and retorno == 'TimeoutError' and retorno == '408 Request Timeout':
-        driver.quit()
-        chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument('--headless')
-        driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\ScrapingAbinee\chromedriver.exe')
-        
+        except TimeoutError:
+            driver.quit()
+            time.sleep(5)
+
+            chrome_options = webdriver.ChromeOptions()
+            chrome_options.add_argument('--headless')
+            driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\ScrapingAbinee\chromedriver.exe')
+
+            response = requests.get(url)
+            retorno = response.status_code
+    
+        except requests.RequestException as err:
+            driver.quit()
+            time.sleep(5)
+
+            chrome_options = webdriver.ChromeOptions()
+            chrome_options.add_argument('--headless')
+            driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\ScrapingAbinee\chromedriver.exe')
+
+            response = requests.get(url)
+            retorno = response.status_code
+
     if retorno != 404:
 
         driver.get(url)
@@ -99,6 +118,7 @@ df['Endereço']=endereco
 df['CEP']=cep
 df['Contato']=contato
 df['Filiado Nº']=numCliente
+
 
 #writing to Excel
 
