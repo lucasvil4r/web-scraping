@@ -11,7 +11,6 @@ cargoRepresentante = []
 endereco = []
 cep = []
 contato = []
-produtos = []
 numCliente = []
 
 chrome_options = webdriver.ChromeOptions()
@@ -28,7 +27,7 @@ while page != qtdPage:
     response = requests.get(url)
     retorno = response.status_code
 
-    if retorno == 408:
+    if retorno == 408 and retorno == 'TimeoutError' and retorno == '408 Request Timeout':
         driver.quit()
         chrome_options = webdriver.ChromeOptions()
         chrome_options.add_argument('--headless')
