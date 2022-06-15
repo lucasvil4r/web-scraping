@@ -10,7 +10,10 @@ representante = []
 cargoRepresentante = []
 endereco = []
 cep = []
-contato = []
+cidade = []
+estado = []
+tel = []
+fax = []
 numCliente = []
 
 chrome_options = webdriver.ChromeOptions()
@@ -18,8 +21,7 @@ chrome_options.add_argument('--headless')
 driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\ScrapingAbinee\chromedriver.exe')
 
 page = 1
-qtdPage = 10000
-
+qtdPage = 11000
 while page != qtdPage:
 
     url = (f'http://www.abinee.org.br/abinee/associa/filiados/{page}.htm')
@@ -91,10 +93,17 @@ while page != qtdPage:
                 endereco.append(distribuidorConteudo[1])
 
             if len(distribuidorConteudo) == 3:
-                cep.append(distribuidorConteudo[2])
+                cepCidadeEstado = distribuidorConteudo[2]
+                cepCidadeEstado = cepCidadeEstado.replace("CEP ", "")
+                distribuiCepCidadeEstado = cepCidadeEstado.rsplit(' · ')
+
+                cep.append(distribuiCepCidadeEstado[0])
+                cidade.append(distribuiCepCidadeEstado[1])
+                estado.append(distribuiCepCidadeEstado[2])
+                distribuiCepCidadeEstado.clear()
 
             if len(distribuidorConteudo) == 4:
-                contato.append(distribuidorConteudo[3])
+                tel.append(distribuidorConteudo[3])
 
         distribuidorConteudo.clear()
         numCliente.append(page)
@@ -116,10 +125,12 @@ df['Representante']=representante
 df['Cargo representante']=cargoRepresentante
 df['Endereço']=endereco
 df['CEP']=cep
-df['Contato']=contato
+df['Cidade']=cidade
+df['Estado']=estado
+df['Contato']=tel
 df['Filiado Nº']=numCliente
 
-
+print(df)
 #writing to Excel
 
 datatoexcel = pd.ExcelWriter('C:/xampp/htdocs/diretorio/Web-Scraping/Relatorios/Scraping-ABINEE.xlsx')
