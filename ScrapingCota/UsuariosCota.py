@@ -30,13 +30,14 @@ driver.find_element_by_xpath("//button[@class='btn btn-primary btn-large']").cli
 
 QtdUsuarioPage = 121
 ultimaPage = 1
-usuario = 10737
-page = 0
+usuario = 10768
+page = 1
 
-while page != ultimaPage:
+while page != ultimaPage + 1:
     cont = 0
-    page +=1
     driver.get(f'https://gpcabling.com.br/usuario/index?page={page}')
+    page +=1
+
 
     time.sleep(2)
 
