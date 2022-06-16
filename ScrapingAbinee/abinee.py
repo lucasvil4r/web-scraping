@@ -21,7 +21,7 @@ chrome_options.add_argument('--headless')
 driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\ScrapingAbinee\chromedriver.exe')
 
 page = 1
-qtdPage = 11000
+qtdPage = 12000
 while page != qtdPage:
 
     url = (f'http://www.abinee.org.br/abinee/associa/filiados/{page}.htm')
@@ -32,17 +32,6 @@ while page != qtdPage:
             retorno = response.status_code
             break
 
-        except TimeoutError:
-            driver.quit()
-            time.sleep(5)
-
-            chrome_options = webdriver.ChromeOptions()
-            chrome_options.add_argument('--headless')
-            driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=r'C:\xampp\htdocs\diretorio\Web-Scraping\ScrapingAbinee\chromedriver.exe')
-
-            response = requests.get(url)
-            retorno = response.status_code
-    
         except requests.RequestException as err:
             driver.quit()
             time.sleep(5)
@@ -103,7 +92,16 @@ while page != qtdPage:
                 distribuiCepCidadeEstado.clear()
 
             if len(distribuidorConteudo) == 4:
-                tel.append(distribuidorConteudo[3])
+                TelFax = distribuidorConteudo[3]
+                TelFax = TelFax.replace("Fone: ", "")
+                TelFax = TelFax.replace("Fax: ", "")
+                distribuiTelFax = TelFax.rsplit(' · ')
+
+                try:
+                    tel.append(distribuiTelFax[0])
+                    fax.append(distribuiTelFax[1])
+                except:
+                    fax.append("")
 
         distribuidorConteudo.clear()
         numCliente.append(page)
@@ -118,8 +116,9 @@ driver.quit()
 
 import pandas as pd
 
-df = pd.DataFrame(columns=['Empresa'])
+df = pd.DataFrame(columns=['Filiado Nº'])
 
+df['Filiado Nº']=numCliente
 df['Empresa']=empresa
 df['Representante']=representante
 df['Cargo representante']=cargoRepresentante
@@ -127,10 +126,11 @@ df['Endereço']=endereco
 df['CEP']=cep
 df['Cidade']=cidade
 df['Estado']=estado
-df['Contato']=tel
-df['Filiado Nº']=numCliente
+df['Telefone']=tel
+df['Fax']=fax
 
 print(df)
+
 #writing to Excel
 
 datatoexcel = pd.ExcelWriter('C:/xampp/htdocs/diretorio/Web-Scraping/Relatorios/Scraping-ABINEE.xlsx')
