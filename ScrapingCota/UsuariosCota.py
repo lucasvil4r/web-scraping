@@ -28,10 +28,11 @@ passowrd_element.send_keys('sofia789@')
 
 driver.find_element_by_xpath("//button[@class='btn btn-primary btn-large']").click()
 
-QtdUsuarioPage = 100
+QtdUsuarioPage = 121
 ultimaPage = 1
 usuario = 10737
 page = 0
+
 while page != ultimaPage:
     cont = 0
     page +=1
@@ -86,4 +87,5 @@ df.to_excel(datatoexcel)
 
 # save the excel
 datatoexcel.save()
+
 print('DataFrame is written to Excel File successfully.')
