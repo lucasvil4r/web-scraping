@@ -23,8 +23,8 @@ time.sleep(2)
 email_element = driver.find_element_by_id('email')
 passowrd_element = driver.find_element_by_id('password')
 
-email_element.send_keys('lucas@gpcabling.com.br')
-passowrd_element.send_keys('sofia789@')
+email_element.send_keys('')
+passowrd_element.send_keys('')
 
 driver.find_element_by_xpath("//button[@class='btn btn-primary btn-large']").click()
 
